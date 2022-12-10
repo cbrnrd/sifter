@@ -1,0 +1,18 @@
+# Description: Configuration file for the application
+# Documentation:
+# Holds the list of important names, dates, numbers, etc to create the wordlist from
+
+names:
+  first:
+    - "first1"
+  last:
+    - "last1"
+
+dates:
+  - "1970-01-01"  # ISO 8601
+
+numbers:
+  - 2000
+
+other:
+  - 'random&data*1)(!#@'
