@@ -62,6 +62,7 @@ fn write_names_basic_combo(out_writer: &mut Box<dyn Write>, first_names: &Vec<&s
     // first_name.capitalize() + last_name.capitalize()
     // first_name.capitalize() + last_name.capitalize() + [0-9]
     // first_name.capitalize() + last_name.capitalize() + [!@#$]
+    // first_name.capitalize() + last_name.capitalize() + [0-9] + [!@#$]
     // first_name + last_name.capitalize()
 
     for first_name in first_names {
@@ -103,6 +104,17 @@ fn write_names_basic_combo(out_writer: &mut Box<dyn Write>, first_names: &Vec<&s
                 let password = format!("{}{}{}", capitalize(first_name), capitalize(last_name), c);
                 out_writer.write_all(password.as_bytes()).unwrap();
                 out_writer.write_all(b"\n").unwrap();
+            }
+        }
+
+        for last_name in last_names {
+            for i in 0..10 {
+                for c in "!@#$".chars() {
+                    // first_name.capitalize() + last_name.capitalize() + [0-9] + [!@#$]
+                    let password = format!("{}{}{}{}", capitalize(first_name), capitalize(last_name), i, c);
+                    out_writer.write_all(password.as_bytes()).unwrap();
+                    out_writer.write_all(b"\n").unwrap();
+                }
             }
         }
 
@@ -241,7 +253,7 @@ fn write_names_numbers(out_writer: &mut Box<dyn Write>, first_names: &Vec<&str>,
 
 fn write_all_first_name_permutations(out_writer: &mut Box<dyn Write>, first_names: &Vec<&str>) {
     // Get all permutations of the first_names vector greater than 1
-    for i in 2..first_names.len() {
+    for i in 2..=first_names.len() {
         let permutations = first_names.iter().permutations(i);
         for permutation in permutations {
             let mut password = String::new();
