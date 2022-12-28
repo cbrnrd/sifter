@@ -15,7 +15,7 @@ This is a work-in-progress project and is mainly intended for me to learn Rust.
 
 ## Future Features
 - [ ] Add the option to provide a hash, hash type, and salt and have `sifter` generate a wordlist and immediately attempt to crack the hash
-- [ ] Combine multiple wordlists into one
+- [x] Combine multiple wordlists into one
 
 ## Building
 To build `sifter`, run `cargo build --release`. The binary will be located in `target/release/sifter`.
@@ -26,5 +26,5 @@ To uninstall `sifter`, run `cargo uninstall sifter`.
 | File | Description |
 | ---- | ----------- |
 | `src/main.rs` | The main program. |
-| `src/config.rs` | The configuration file parser. TODO |
+| `src/combine.rs` | The wordlist combination logic. |
 | `src/generator.rs` | The password generator. |
