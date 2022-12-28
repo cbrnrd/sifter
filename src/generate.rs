@@ -53,6 +53,8 @@ fn do_generate(first_names: Vec<&str>, last_names: Vec<&str>, dates: Vec<&str>, 
     write_name_dates_combo(&mut out_writer, &first_names, &last_names, &dates);
     write_names_numbers(&mut out_writer, &first_names, &last_names, &numbers);
     write_all_first_name_permutations(&mut out_writer, &first_names);
+    write_all_last_name_permutations(&mut out_writer, &last_names);
+    write_all_first_name_with_other(&mut out_writer, &first_names, &other);
 }
 
 fn write_names_basic_combo(out_writer: &mut Box<dyn Write>, first_names: &Vec<&str>, last_names: &Vec<&str>) {
@@ -271,6 +273,49 @@ fn write_all_first_name_permutations(out_writer: &mut Box<dyn Write>, first_name
     }
     
 }
+
+fn write_all_last_name_permutations(out_writer: &mut Box<dyn Write>, last_names: &Vec<&str>) {
+    // Get all permutations of the last_names vector greater than 1
+    for i in 2..=last_names.len() {
+        let permutations = last_names.iter().permutations(i);
+        for permutation in permutations {
+            let mut password = String::new();
+            for name in permutation {
+                password.push_str(name);
+            }
+            out_writer.write_all(password.as_bytes()).unwrap();
+            out_writer.write_all(b"\n").unwrap();
+            
+            // Capitalize the last names
+            let password = capitalize(&password);
+            out_writer.write_all(password.as_bytes()).unwrap();
+            out_writer.write_all(b"\n").unwrap();
+        }
+    }
+}
+
+fn write_all_first_name_with_other(out_writer: &mut Box<dyn Write>, first_names: &Vec<&str>, other: &Vec<&str>) {
+    // Get all first names with each entry in `other`
+    for first_name in first_names {
+        for other_entry in other {
+            let mut password = format!("{}{}", first_name, other_entry);
+            out_writer.write_all(password.as_bytes()).unwrap();
+            out_writer.write_all(b"\n").unwrap();
+            password = format!("{}{}", capitalize(first_name), other_entry);
+            out_writer.write_all(password.as_bytes()).unwrap();
+            out_writer.write_all(b"\n").unwrap();
+
+            // Do it the other way around
+            let mut password = format!("{}{}", other_entry, first_name);
+            out_writer.write_all(password.as_bytes()).unwrap();
+            out_writer.write_all(b"\n").unwrap();
+            password = format!("{}{}", other_entry, capitalize(first_name));
+            out_writer.write_all(password.as_bytes()).unwrap();
+            out_writer.write_all(b"\n").unwrap();
+        }
+    }
+}
+    
 
 //////////////////////////
 ///// CONFIG PARSING /////

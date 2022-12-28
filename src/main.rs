@@ -1,5 +1,6 @@
 use clap::{Parser, ColorChoice};
 mod generate;
+mod combine;
 
 #[derive(Parser)]
 #[clap(
@@ -32,13 +33,31 @@ enum Subcommands {
     /// Combine 2 wordlists
     #[clap(name = "combine")]
     Combo {
-        /// The first wordlist to use
-        #[clap(long)]
-        wordlist1: String,
+        /// An array of file paths to wordlists
+        #[clap(required = true)]
+        wordlists: Vec<String>, 
 
-        /// The second wordlist to use
-        #[clap(long)]
-        wordlist2: String,
+        /// Whether to remove duplicates
+        /// (default: false)
+        #[clap(short, long, default_value = "false")]
+        remove_duplicates: bool,
+
+        /// Whether to sort the wordlist
+        /// (default: false)
+        #[clap(short, long, default_value = "false")]
+        sort: bool,
+
+        /// The output file to use
+        /// (default: stdout)
+        #[clap(short, long)]
+        output: Option<String>, // The output file to use
+
+
+        /// The delimiter to split the input files by
+        /// (default: \n)
+        #[clap(short, long)]
+        delimiter: Option<String>,
+
     }
 }
 
@@ -53,11 +72,12 @@ fn main() {
             // Generate a password list from a configuration file
             generate::generate(config, output);
         },
-        Subcommands::Combo { wordlist1, wordlist2 } => {
-            // Combine 2 wordlists
-            println!("Combining 2 wordlists");
-            println!("Wordlist 1: {}", wordlist1);
-            println!("Wordlist 2: {}", wordlist2);
+        Subcommands::Combo { wordlists,
+                             remove_duplicates,
+                             sort,
+                             output,
+                             delimiter } => {
+            combine::combine(wordlists, remove_duplicates, sort, output, delimiter);
         }
     }
 }
